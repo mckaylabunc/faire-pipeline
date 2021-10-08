@@ -12,6 +12,7 @@ is_paired_end = config['pairedEnd']
 REFGENOME = config['refGenome']
 SPIKEGENOME = config['spikeGenome']
 REFGENOMEPATH = config['genome'][REFGENOME]['bowtie']
+BLACKLISTPATH = config['genome'][REFGENOME]['blacklistPath']
 SPIKEGENOMEPATH = config['genome'][SPIKEGENOME]['bowtie']
 controlDNAPath  = config['genome'][REFGENOME]['controlDNAPath']
 chromSize_Path  = config['genome'][REFGENOME]['chrSize']
@@ -210,11 +211,13 @@ rule bamToBed:
 		idx = "Bam/{sample}_{species}_trim_q5_sorted_dupsRemoved.bam.bai"
 	output:
 		"Bed/{sample}_{species}_trim_q5_sorted_dupsRemoved.bed"
+	params:
+		blklist = BLACKLISTPATH
 	envmodules:
 		modules['bedtoolsVer']
 	shell:
 		"""
-		bedtools bamtobed -i {input.bam} > {output}
+		bedtools bamtobed -i {input.bam} | sort -k 1,1 -k 2,2n | bedtools intersect -a stdin -b {params.blklist} -v  > {output}
 		"""
 
 rule bigWig:
@@ -282,7 +285,7 @@ rule CallRepPeaks:
     	"Peaks/{sample}_{species}_trim_q5_sorted_dupsRemoved_peaks.narrowPeak"
     params:
     	prefix = "Peaks/{sample}_{species}_trim_q5_sorted_dupsRemoved",
-	control = controlDNAPath
+    	control = controlDNAPath
     envmodules:
         modules['macsVer']
     shell:

@@ -13,6 +13,7 @@
 			"fasta" : "",
 			"chrSize" : "/proj/mckaylab/genomeFiles/dm3/dm3.chrom.sizes",
 			"controlDNAPath" : "/proj/mckaylab/genomeFiles/dm3/ControlGenomicDNA/ControlGenomicDNA_q5_sorted_dupsRemoved_noYUHet.bed",
+			"blacklistPath" : "/proj/mckaylab/genomeFiles/dm3/dm3Blacklist.bed",
 			"genomeSize" : 121400000
 		},
 		"dm6" : { 
@@ -20,6 +21,7 @@
 			"fasta" : "/proj/mckaylab/genomeFiles/dm6/dm6.fa",
 			"chrSize" : "/proj/mckaylab/genomeFiles/dm6/dm6_chromSizes.txt",
 			"controlDNAPath" : "/proj/mckaylab/genomeFiles/dm6/ControlGenomicDNA/ControlGenomicDNA_trim_q5_dupsRemoved.bed",
+			"blacklistPath" : "/proj/mckaylab/genomeFiles/dm6/dm6-blacklist.v2.bed.gz",
 			"genomeSize" : 137547960
 		},
 		"ecoli" : { 
