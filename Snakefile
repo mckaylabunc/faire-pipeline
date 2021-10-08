@@ -148,11 +148,14 @@ rule sam2bam:
 	output:
 		bam = "Bam/{sample}_{species}_trim.bam",
 		flagstat = "logs/{sample}_{species}_trim.flagstat"
+	params: 
+		blklist = BLACKLISTPATH
 	envmodules:
-		modules['samtoolsVer']
+		modules['samtoolsVer'],
+		modules['bedtoolsVer']
 	shell:
 		"""
-		samtools view -@ 4 -b {input} > {output.bam} &&
+		samtools view -@ 4 -b {input} | bedtools intersect -a stdin -b {params.blklist} -v > {output.bam} &&
 		samtools flagstat {output.bam} > {output.flagstat}
 		"""
 rule qFilter:
@@ -211,13 +214,11 @@ rule bamToBed:
 		idx = "Bam/{sample}_{species}_trim_q5_sorted_dupsRemoved.bam.bai"
 	output:
 		"Bed/{sample}_{species}_trim_q5_sorted_dupsRemoved.bed"
-	params:
-		blklist = BLACKLISTPATH
 	envmodules:
 		modules['bedtoolsVer']
 	shell:
 		"""
-		bedtools bamtobed -i {input.bam} | sort -k 1,1 -k 2,2n | bedtools intersect -a stdin -b {params.blklist} -v  > {output}
+		bedtools bamtobed -i {input.bam} > {output}
 		"""
 
 rule bigWig:
